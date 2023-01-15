@@ -1,5 +1,6 @@
 import http from 'http';
 import { PORT } from './config';
+import { errors } from './constants';
 
 import { createUser, deleteUser, getAllUsers, getUser, updateUser } from './controller';
 import { UserWithId } from './types';
@@ -19,7 +20,7 @@ const server = http.createServer((req, res) => {
   } else if (req.url?.startsWith('/api/users/') && req.method === 'DELETE') {
     deleteUser(req, res, users);
   } else {
-    onError(res, 404, 'Route not found: please use the api/users endpoint');
+    onError(res, errors.WRONG_ROUTE);
   }
 });
 

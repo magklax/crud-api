@@ -16,12 +16,12 @@ export const getRequestBody = (req: IncomingMessage): Promise<string> => {
   });
 };
 
-export const onError = <T>(res: ServerResponse, status: number, message: T) => {
-  res.writeHead(status, { 'Content-Type': 'application/json' });
-  return res.end(JSON.stringify({ message }));
+export const onError = (res: ServerResponse, error: { status: number, message: string }) => {
+  res.writeHead(error.status, { 'Content-Type': 'application/json' });
+  return res.end(error.message);
 };
 
-export const onSuccess = <T>(res: ServerResponse, status: number, data: T) => {
+export const onSuccess = <T>(res: ServerResponse, status: number, data?: T) => {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   return res.end(JSON.stringify(data));
 };
