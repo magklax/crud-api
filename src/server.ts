@@ -3,8 +3,10 @@ import { PORT } from './config';
 import { errors } from './constants';
 
 import { createUser, deleteUser, getAllUsers, getUser, updateUser } from './controller';
-import { db } from './db';
+import { UserWithId } from './types';
 import { onError } from './utils';
+
+const db: UserWithId[] = [];
 
 const basePort = Number(PORT) || 4000;
 

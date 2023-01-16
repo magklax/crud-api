@@ -2,12 +2,13 @@ import cluster from 'node:cluster';
 import http from 'node:http';
 import os from 'node:os';
 
-import { db } from './db';
 import { PORT } from './config';
 import { getAllUsers, createUser, deleteUser, updateUser, getUser } from './controller';
 import { UserWithId } from './types';
 import { getServers, onError } from './utils';
 import { errors } from './constants';
+
+const db: UserWithId[] = [];
 
 const basePort = Number(PORT) || 4000;
 
