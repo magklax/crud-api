@@ -9,6 +9,7 @@ Implementation of simple CRUD API using in-memory database underneath.
 1. Clone project repo `git clone git@github.com:magklax/crud-api.git`
 2. Go to project directory `cd crud-api`
 3. Install dependencies `npm install`
+4. Create file `.env` in project root and add variable PORT, e.g `PORT=4000`
 
 **make sure you use 18 LTS version of Node.js**
 
