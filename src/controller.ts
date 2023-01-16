@@ -1,9 +1,10 @@
-import { v4 as uuidv4, validate } from 'uuid';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { onError, getRequestBody, onSuccess } from './utils';
 import { User, UserWithId } from './types';
 import { errors } from './constants';
+
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 
 export const getAllUsers = async (
   _: IncomingMessage,
@@ -25,7 +26,7 @@ export const getUser = async (
   try {
     const userId = req.url?.split('/')[3];
 
-    if (!userId || !validate(userId)) {
+    if (!userId || !uuidValidate(userId)) {
       return onError(res, errors.INVALID_ID);
     }
 
@@ -54,10 +55,10 @@ export const createUser = async (
     }
     const newUser = { id: uuidv4(), username, age, hobbies };
 
-    const updatedUser = [...users, newUser];
+    users.push(newUser);
 
     res.on('close', () => {
-      process.send?.(updatedUser);
+      process.send?.(users);
     });
 
     return onSuccess(res, 201, newUser);
@@ -74,7 +75,7 @@ export const updateUser = async (
   try {
     const userId = req.url?.split('/')[3];
 
-    if (!userId || !validate(userId)) {
+    if (!userId || !uuidValidate(userId)) {
       return onError(res, errors.INVALID_ID);
     }
 
@@ -93,10 +94,10 @@ export const updateUser = async (
       ...(!!hobbies && { hobbies }),
     };
 
-    const updatedUsers = users.map((user) => user.id === userId ? updatedUser : user);
+    users[userIndex]  = updatedUser;
 
     res.on('close', () => {
-      process.send?.(updatedUsers);
+      process.send?.(users);
     });
 
     return onSuccess(res, 200, updatedUser);
@@ -113,7 +114,7 @@ export const deleteUser = async (
   try {
     const userId = req.url?.split('/')[3];
 
-    if (!userId || !validate(userId)) {
+    if (!userId || !uuidValidate(userId)) {
       return onError(res, errors.INVALID_ID);
     }
 
@@ -123,10 +124,10 @@ export const deleteUser = async (
       return onError(res, errors.USER_DOES_NOT_EXIST);
     }
 
-    const updatedUsers = users.filter(({ id }) => id !== userId);
+    users.splice(userIndex, 1);
 
     res.on('close', () => {
-      process.send?.(updatedUsers);
+      process.send?.(users);
     });
 
     return onSuccess(res, 204);

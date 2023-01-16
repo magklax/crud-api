@@ -25,3 +25,6 @@ export const onSuccess = <T>(res: ServerResponse, status: number, data?: T) => {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   return res.end(JSON.stringify(data));
 };
+
+
+export const getServers = (length: number, basePort: number) => Array.from({ length }).map((_, index) => basePort + index + 1);
